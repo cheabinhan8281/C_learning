@@ -38,15 +38,49 @@ int main()
 	printf("%d \n%d\n", &sz, &sz2);
 
 	// 문자열의 입력
+	//입력 데이터: "Tom Cruze\n"
+	//scanf: "Tom"
+	//fgets: "Tom Cruze\n"
+
 	char name[20];			// 알파벳 9글자 + \0  입력가능
 	printf("이름을 입력하세요: ");
 	//scanf("%s", name);		// 문자열 입력 %s, 배열의 경우: &(주소연산자) 사용X, 공백 기준으로 입력 끊김
-	//printf("%s", name);
+	//printf("%s\n", name);
 
 	//fgets(받을 배열, 최대길이, stdin)			// 공백 있어도 입력 끊기지 않음
 	//표준입력장치로부터 문자열을 입력받아 name에 대입
 	fgets(name, 20, stdin);
-	printf("%s", name);
+	int len = strlen(name);
+	name[len - 1] = 0;					// \n 제거
+	printf("name: %s\n", name);
+
+	// 문자열 길이: strlen
+	// 문자열 비교: strcmp
+	
+	// 배열 문자열 대입: 
+
+	printf("sz: %s\n", sz);
+	strcpy(sz, "ABCDE");				// sz에 "ABCDE" 대입
+	printf("%s\n", sz);
+	//sz 공간이 6byte인데 7byte 넣어서 터짐
+	//strcpy(sz, "ABCDEF");				// sz에 "ABCDEF" 대입 -> Overflow Runtime Error
+	//printf("%s\n", sz);
+
+	//syntax error(compile error)
+	//runtime error <- debugging
+	//logical error
+
+	// 문자열 추가
+	// in Python
+	// s = 'abc'
+	// s = s + 'def'
+	// s = 'abcdef'
+	// in C
+	// name[20]: 알파벳 19글자까지 저장 가능
+	strcat(name, "plus string"); // name = name + "plus string"
+	printf("name: %s\n", name);
+
+
 
 
 	return 0;
