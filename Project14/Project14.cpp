@@ -17,7 +17,10 @@ int add(int a, int b)               // int 함수: 반환값의 데이터 타입
 
 void show_menu()        // 매개변수, 반환값 없는 함수
 {
-
+    printf("1. 새 파일\n");
+    printf("2. 파일 저장\n");
+    printf("3. 파일 열기\n");
+    printf("x. 종료\n");
 }
 
 int main()
