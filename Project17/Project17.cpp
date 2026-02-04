@@ -1,23 +1,43 @@
 ﻿#include <stdio.h>
 #include <iostream>
 
-void display_var(int a, int b)
+// 배열을 매개변수로 받는 함수를 정의할 때 반드시 배열의 주소와 배열 아이템 개수 같이 제공해야함
+void print_array(int arr[], size_t count)       // 배열 들어오는 자리임, int arr[] == int* arr
 {
-    printf("%d, %d\n", a, b);
+    printf("arr의 주소: %p\n", arr);
+    for (int i = 0; i < count; i++)
+    {
+        printf("%d\t", arr[i]);
+    }
 }
 
+void print_value(int n)
+{
+    printf("%d\n", n);
+}
 
 
 
 int main()
 {
+    int a = 10;
+    int b = 5;
+    int c = 3;
+    print_value(a);
+    print_value(b);
+    
+
+
+
     int n = 5;
     printf("n의 주소: %p\n", &n);
 
     int arr[100];
-    printf("arr의 주소: %p\n", arr);               // arr의 주소 == arr[0]의 주소
+    int arr2[200];
+
+    printf("arr의 주소: %p\n", arr);               // arr == arr[0]의 주소
     printf("arr[0]의 주소: %p\n", &arr[0]);
-    printf("arr+1의 주소: %p\n", arr + 1);         // arr + 1의 주소 == arr[1]의 주소
+    printf("arr+1의 주소: %p\n", arr + 1);         // arr + 1 == arr[1]의 주소
     printf("arr[1]의 주소: %p\n", &arr[1]);
     printf("arr+2의 주소: %p\n", arr + 2);
     printf("arr[2]의 주소: %p\n", &arr[2]);
@@ -29,22 +49,19 @@ int main()
     {
         arr[i] = i + 1;
     }
+    for (int i = 0; i < 200; i++)
+    {
+        arr2[i] = i + 1;
+    }
 
     printf("arr[5] = %d\n", arr[5]);
     printf("p[5] = %d\n", p[5]);
 
+    // 배열을 전달하는 함수 호출
+    print_array(arr,100);
+    printf("\n\n\n");
+    print_array(arr2,200);
 
 
     return 0;
 }
-
-// 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
-// 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
-
-// 시작을 위한 팁: 
-//   1. [솔루션 탐색기] 창을 사용하여 파일을 추가/관리합니다.
-//   2. [팀 탐색기] 창을 사용하여 소스 제어에 연결합니다.
-//   3. [출력] 창을 사용하여 빌드 출력 및 기타 메시지를 확인합니다.
-//   4. [오류 목록] 창을 사용하여 오류를 봅니다.
-//   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
-//   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
