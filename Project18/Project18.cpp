@@ -49,6 +49,7 @@ int find_max(int arr[], size_t count)
 
     /*sort_array(arr,count);
     return arr[count-1];*/
+
     int max = arr[0];
     for (int i = 1; i < count; i++)
     {
@@ -59,6 +60,61 @@ int find_max(int arr[], size_t count)
     }
     return max;
 }
+
+/*순차 탐색 알고리즘*/
+int find_value(int arr[], size_t count, int value)
+{
+    for (int i = 0; i < count; i++)
+    {
+        if (arr[i] == value)
+        {
+            printf("%d 번 만에 찾음\n", i + 1);
+        }
+    } 
+    return -1;
+}
+
+/*이진 탐색 Binary Search*/
+int Bsearch(int arr[], size_t count, int value)
+{
+    // 3개의 인덱싱 변수 준비 (start, middle, end)
+    int start = 0;
+    int end = count - 1;
+    int mid;
+    int i = 1;
+    while (start <= end)
+    {
+        mid = (start + end) / 2;        // 현재 상태의 가운데 인덱스
+        if (value == arr[mid])
+        {
+            printf("%d 번 만에 찾음\n", i);
+            return mid;
+        }
+        // 인덱스 범위 재조정
+        if (value > arr[mid])
+            start = mid + 1;
+        else
+            end = mid - 1;
+        i++;
+    }
+    return -1;
+}
+
+/*
+학생의 중간고사 점수가 배열로 주어졌을 때 총점과 평균을 반환하는 함수
+여러개의 배열 반환할때, return 변수1, 포인터 변수2,3...n
+*/
+float total_avg(float arr[], size_t count, float* ptot)
+{
+    float tot = 0.F;
+    for (int i = 0; i < count; i++)
+        tot += arr[i];
+    float avg = tot / count;
+    *ptot = tot;
+
+    return avg;
+}
+
 
 int main()
 {
@@ -73,8 +129,26 @@ int main()
     sort_array(arr,15);
     print_array(arr, 15);
     printf("%d\n",find_max(arr, 15));
-    
-    
+
+    // 정렬을 하는 이유: 효율적 탐색
+    const int COUNT = 10000;
+    int arr2[COUNT];
+    for (int i = 0; i < COUNT; i++)
+        arr2[i] = i + 1;
+
+    int result = find_value(arr2, COUNT, 54);
+    printf("찾은 인덱스: %d\n", result);
+    result = Bsearch(arr2, COUNT, 54);
+    printf("찾은 인덱스: %d\n", result);
+
+    float tot, avg;
+    float score[] = { 100.F,99.F,88.F };
+    avg = total_avg(score, 3, &tot);
+    printf("avg = %.2f\n", avg);
+    printf("tot = %.2f\n", tot);
+    printf("총점 = %.2f, 평균: %.2f\n", tot, avg);
+
+
     return 0;
 }
 
