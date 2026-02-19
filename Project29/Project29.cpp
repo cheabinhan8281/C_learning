@@ -31,10 +31,12 @@ void input_score(SCORE* score)
     printf("번호를 입력하세요: ");
     scanf("%d", &score->number);
 
-    //char tmp;
-    //scanf("%c", &tmp);
 
     printf("이름을 입력하세요: ");
+    char tmp;
+    scanf("%c", &tmp);
+
+
     fgets(score->name, MAX_NAME, stdin);		// 문자열 입력 받기+공백
     score->name[strlen(score->name) - 1] = '\0';	// 입력된 엔터키 \n 제거
 
