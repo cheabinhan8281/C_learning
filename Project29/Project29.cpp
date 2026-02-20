@@ -1,66 +1,48 @@
 ﻿#include "Project29.h"
 
-char get_grade(float avg)
-{
-    int tmp = (int)avg / 10;
-    switch (tmp)
-    {
-    case 10:
-    case 9:
-        return 'A';
-    case 8:
-        return 'B';
-    case 7:
-        return 'C';
-    case 6:
-        return 'D';
-    }
-    return 'F';
-}
-
-// 한 명의 성적데이터를 입력받아 반환하는 함수
-void input_score(SCORE* score)
-{
-    if (!score)
-    {
-        printf("잘못된 호출입니다.\n");
-        return;
-    }
-    // printf("SCORE 구조체의 크기: %llu bytes\n", sizeof(SCORE));
-
-    printf("번호를 입력하세요: ");
-    scanf("%d", &score->number);
-
-
-    printf("이름을 입력하세요: ");
-    char tmp;
-    scanf("%c", &tmp);
-
-
-    fgets(score->name, MAX_NAME, stdin);		// 문자열 입력 받기+공백
-    score->name[strlen(score->name) - 1] = '\0';	// 입력된 엔터키 \n 제거
-
-    printf("국어,영어,수학 점수를 차례로 입력하세요: ");
-    scanf("%d %d %d", &score->kor, &score->eng, &score->math);
-
-    // total
-    score->total = score->kor + score->eng + score->math;
-       score->avg = score->total / 3.F;
-       
-    // grade
-    score->grade = get_grade(score->avg);
-
-
-}
 
 
 int main()
 {
+    // 메인 데이터들이 저장될 배열 -> 동적 배열 // arr[20] 같이 한정된 공간X
+    SCORE* scores=NULL;     // 동적인 배열
+    size_t count = 0;       // 배열의 현재 아이템 개수
+
+    count = load_score(&scores);
+
     char menu;
     do {
         show_menu();
         menu = select_menu();
-    } while (1);
+        switch (menu)
+        {
+        case '1':       // 점수 입력
+            count = input_score(&scores, count);
+            save_score(scores, count);
+            print_scores(scores, count);
+            break;
+        case '2':       // 점수 출력
+            print_scores(scores, count);
+            break;
+        case '3':       // 점수 수정
+            select_update(scores, count);
+            save_score(scores, count);
+            print_scores(scores, count);
+
+            break;
+        case 'x':
+            if (scores)
+            {
+                free(scores);
+                scores = NULL;
+            }
+        }
+
+        // 일시 정지 화면전환
+        if (menu != 'x') wait();
+
+
+    } while (menu != 'x');
 
     /*
     SCORE sc;
