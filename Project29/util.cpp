@@ -22,8 +22,8 @@ char select_menu()
 
 		if (menu >= '1' && menu <= '4')
             return (char)menu;
-		if (menu == 'x' || menu == 'X')
-			exit(0);
+        if (menu == 'x' || menu == 'X')
+            return 'x';
 		printf("잘못 입력했습니다. 다시 입력하세요.\n");
 	} while (1);
 
@@ -65,11 +65,9 @@ size_t input_score(SCORE** ppScores, size_t count)  // 2차원 포인터
 
     printf("번호를 입력하세요: ");
     scanf("%d", &sc.number);
-
+    getchar();   // ← 반드시 추가
 
     printf("이름을 입력하세요: ");
-    char tmp;
-    scanf("%c", &tmp);
 
 
     fgets(sc.name, MAX_NAME, stdin);		// 문자열 입력 받기+공백
@@ -152,6 +150,12 @@ int find_score(SCORE* pScores, size_t count, uint number)
 
 void select_update(SCORE* pScores, size_t count)
 {
+    if (!pScores || !count)
+    {
+        printf("수정할 데이터가 없습니다.\n");
+        return;
+    }
+
     print_scores(pScores, count);
 
     printf("=====================================\n");
@@ -162,12 +166,12 @@ void select_update(SCORE* pScores, size_t count)
         uint number;
         printf("수정하고자 하는 학생의 번호를 입력하세요: ");
         scanf("%d", &number);
+        getchar();   // ← 반드시 추가
+
         idx = find_score(pScores, count, number);
 
     } while (idx == -1);
 
-    char tmp;
-    scanf("%d", &tmp);
 
     printf("번호: %d\n", pScores[idx].number);
     printf("이름: %s\n", pScores[idx].name);
@@ -193,6 +197,64 @@ void select_update(SCORE* pScores, size_t count)
     pScores[idx].grade = get_grade(pScores[idx].avg);
 
 
+}
+
+size_t remove_score(SCORE** ppScores, size_t count)
+{
+    SCORE* pScores = *ppScores;
+
+    if (!pScores || !count)
+    {
+        printf("수정할 데이터가 없습니다.\n");
+        return 0;
+    }
 
 
+    int idx = -1;
+    do
+    {
+        print_scores(pScores, count);
+        printf("삭제하려는 번호를 입력하세요: ");
+
+        uint number;
+        scanf("%u", &number);
+
+        idx = find_score(pScores, count, number);
+
+    } while (idx == -1);
+
+    size_t new_count = count - 1;
+    if (!new_count)
+    {
+        // 기존 데이터가 1개 밖에 없는 상황
+        free(pScores);
+        return 0;
+    }
+
+    size_t new_size = sizeof(SCORE) * new_count;
+
+    SCORE* pNewScores = (SCORE*)malloc(new_size);
+    if (!pNewScores)
+    {
+        printf("데이터를 삭제할 수 없습니다.\n");
+        return count;
+    }
+
+    for (int i = 0, j=0; i < count; i++) {  // j 수동 증가
+        if (i == idx)       // 현재 복사 대상이 삭제할 아이템이면 스킵
+            continue;
+
+        // 기존 배열의 내용을 새로운 배열에 복사
+        memcpy(pNewScores + j, pScores + i, sizeof(SCORE));
+        j++;
+
+    }
+    // 메인 배열 업데이트
+    *ppScores = pNewScores;
+
+    
+    // 기존 배열 삭제
+    free(pScores);
+
+    return new_count;
 }

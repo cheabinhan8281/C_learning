@@ -32,11 +32,11 @@ void wait();
 
 
 void print_scores(const SCORE* pScores, size_t count);
-size_t input_score(SCORE** ppScores, size_t count);
+size_t input_score(SCORE** ppScores, size_t count);			// size = size+1 -> 배열 하나 추가
 
 int find_score(SCORE* pScores, size_t count, uint number);
 void select_update(SCORE* pScores, size_t count);
-
+size_t remove_score(SCORE** scores, size_t count);			// size = size-1 -> 배열 하나 삭제
 
 
 

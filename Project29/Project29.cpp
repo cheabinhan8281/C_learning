@@ -30,12 +30,13 @@ int main()
             print_scores(scores, count);
 
             break;
+        case '4':
+            count = remove_score(&scores, count);
+            save_score(scores, count);
+            print_scores(scores, count);
+            break;
         case 'x':
-            if (scores)
-            {
-                free(scores);
-                scores = NULL;
-            }
+            printf("프로그램 종료\n");
         }
 
         // 일시 정지 화면전환
@@ -43,6 +44,13 @@ int main()
 
 
     } while (menu != 'x');
+
+    // Heap 할당된 메모리 삭제
+    if (scores)
+    {
+        free(scores);
+        scores = NULL;
+    }
 
     /*
     SCORE sc;
