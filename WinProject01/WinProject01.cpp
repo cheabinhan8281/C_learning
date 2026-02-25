@@ -16,8 +16,11 @@
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
+BOOL bDrag = FALSE;
 BOOL bShowText = FALSE;
 BOOL bShowRect = FALSE;
+int xPos, yPos;
+int xStartPos, yStartPos;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -124,29 +127,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-void ShowHello(HWND hwnd, HDC hdc)
-{
-    // 디바이스 컨텍스트 획득
-
-    LPCWSTR lpszMessage = L"안녕하세요";
-    int len = wcslen(lpszMessage);
-
-    RECT rt;
-    ::GetClientRect(hwnd, &rt);                     // rt 구조체에 윈도우의 크기를 돌려줌
-    int width = rt.right - rt.left;                 // 윈도우의 내부 넓이
-    int height = rt.bottom - rt.top;                // 윈도우의 내부 높이
-
-    int center_x = width / 2;
-    int center_y = height / 2;
-
-    ::TextOutW(hdc, center_x-50,center_y, lpszMessage, len);        // 디바이스 컨택스트에 문자열 출력, 위치, 길이. TextOutA; only Eng, TextOutW; +Kor
-
-}
-
-void ShowRectangle(HWND hwnd, HDC hdc)
-{
-
-}
 
 
 //
@@ -204,12 +184,36 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 ShowHello(hWnd, hdc);
             if (bShowRect)
                 ShowRectangle(hWnd, hdc);
+            ShowMouseLocation(hdc, xPos,yPos);
             EndPaint(hWnd, &ps);
         }
         break;
+    case WM_LBUTTONDOWN:        // 클라이언트 영역 안에서 마우스 왼쪽 버튼을 누르면 발생
+        {
+        xStartPos = GET_X_LPARAM(lParam);
+        yStartPos = GET_Y_LPARAM(lParam);
+        bDrag = TRUE;       // 드래그 중임을 알리는 전역변수
+        break;
+
+        }
+    case WM_MOUSEMOVE:      // 클라이언트 영역 안에서 마우스를 움직이면 발생
+    {
+        xPos = GET_X_LPARAM(lParam);
+        yPos = GET_Y_LPARAM(lParam);
+        InvalidateRect(hWnd, NULL, TRUE);       // WM_PAINT 메시지를 강제로 발생
+    }
+        break;
+    case WM_LBUTTONUP:
+    {
+        bDrag = FALSE;
+        break;
+    }
+   
+
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
